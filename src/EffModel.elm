@@ -28,28 +28,28 @@ EffModel.
 
 I use it extensively like this:
 
-import EffModel as EF
+    import EffModel as EF
 
-handleUpdateForOneLogicalThing : Action -> EffModel Model Action -> EffModel Model Action
-handleUpdateForOneLogicalThing action effmodel =
-    case action of
-        Increment -> effmodel |> EF.map (\m -> { m | count = m.count + 1 })
-        Decrement ->
-            effmodel
+    handleUpdateForOneLogicalThing : Action -> EffModel Model Action -> EffModel Model Action
+    handleUpdateForOneLogicalThing action effmodel =
+        case action of
+            Increment -> effmodel |> EF.map (\m -> { m | count = m.count + 1 })
+            Decrement ->
+                effmodel
                 -- Compose model update and an effect conveniently
-                |> EF.map (\m -> { m | count = m.count - 1 })
-                |> EF.eff (Effects.task (Task.sleep (5 * Time.second) `Task.andThen` (\_ -> Task.succeed Increment)))
-        _ -> effmodel -- Note that you can just pass it through easily
+                    |> EF.map (\m -> { m | count = m.count - 1 })
+                    |> EF.eff (Effects.task (Task.sleep (5 * Time.second) `Task.andThen` (\_ -> Task.succeed Increment)))
+            _ -> effmodel -- Note that you can just pass it through easily
 
-handleUpdateForAnotherLogicalThing : Action -> EffModel Model Action -> EffModel Model Action
+    handleUpdateForAnotherLogicalThing : Action -> EffModel Model Action -> EffModel Model Action
 
-update : Action -> Model -> (Model, Effects Action)
-update action model =
-    model
-        |> wrap
-        |> handleUpdateForOneLogicalThing action
-        |> handleUpdateForAnotherLogicalThing action
-        |> unwrap
+    update : Action -> Model -> (Model, Effects Action)
+    update action model =
+        model
+            |> wrap
+            |> handleUpdateForOneLogicalThing action
+            |> handleUpdateForAnotherLogicalThing action
+            |> unwrap
 
 # Definition
 
@@ -92,10 +92,10 @@ type alias EffModel model action = {
 
 Get the model from an EffModel:
 
-case action of
-    IncrementAndNotify ->
-        effmodel
-            |> (\effmodel -> EF.effMessage (Notify (EF.get m).count) effmodel)
+    case action of
+        IncrementAndNotify ->
+            effmodel
+                |> (\effmodel -> EF.effMessage (Notify (EF.get m).count) effmodel)
 
 -}
 get : EffModel model action -> model
