@@ -1,5 +1,5 @@
 {
-    "version": "3.0.0",
+    "version": "2.0.1",
     "summary": "Simple package to make dealing with model and effect pairs more composable.",
     "repository": "https://github.com/prozacchiwawa/effmodel.git",
     "license": "MIT",
